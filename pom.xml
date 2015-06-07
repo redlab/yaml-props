@@ -1,11 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>com.truvo</groupId>
-		<artifactId>truvoparent</artifactId>
-		<version>1.0</version>
-	</parent>
 	<groupId>be.redlab.maven</groupId>
 	<artifactId>yaml-props</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -30,4 +25,12 @@
 			</plugin>
 		</plugins>
 	</build>
+	<scm>
+		<url>https://github.com/redlab/yaml-props/</url>
+		<developerConnection>https://github.com/redlab/yaml-props.git</developerConnection>
+	</scm>
+	<issueManagement>
+		<system>Github</system>
+		<url>https://github.com/redlab/yaml-props/issues</url>
+	</issueManagement>
 </project>
