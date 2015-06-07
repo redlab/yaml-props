@@ -27,9 +27,11 @@ POM excerpt
 				</executions>
 			</plugin>
 ```
+
 ## yamlprops:yamlprops
 
 ### Available parameters:
+output of mvn be.redlab.maven:yamlprops-maven-plugin:help -Ddetail=true 
 
 *    extension (Default: properties)
 
