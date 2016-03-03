@@ -36,8 +36,8 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.plexus.util.StringUtils;
 
-import com.truvo.common.yamlprops.parser.YamlPropertyConverter;
-import com.truvo.common.yamlprops.parser.YamlPropertyConverterImpl;
+import be.redlab.maven.yamlprops.parser.YamlPropertyConverter;
+import be.redlab.maven.yamlprops.parser.YamlPropertyConverterImpl;
 
 /**
  * 
@@ -90,7 +90,7 @@ public class YamlToPropertiesMojo extends AbstractMojo {
 	@Parameter(property = "ignoreNotFound", defaultValue = "false")
 	protected boolean ignoreNotFound;
 	/**
-	 * The fle extension for generated property files. Defaults to properties
+	 * The file extension for generated property files. Defaults to properties
 	 */
 	@Parameter(property = "extension", defaultValue = "properties")
 	private String extension;
@@ -133,9 +133,9 @@ public class YamlToPropertiesMojo extends AbstractMojo {
 						}
 						file = new File(targetDir, targetFile + "." + extension);
 					}
-					file.createNewFile();
+					boolean newFile = file.createNewFile();
 					stream = new FileOutputStream(file);
-					e.getValue().store(stream, "Written from yaml on " + new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()));
+					e.getValue().store(stream, "Written "+ (newFile?"new file":"") +" from yaml on " + new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()));
 				} catch (IOException e1) {
 					throw new MojoExecutionException("Unable to write file ", e1);
 				} finally {
