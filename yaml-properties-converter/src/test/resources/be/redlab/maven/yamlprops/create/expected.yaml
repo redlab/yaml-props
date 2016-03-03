@@ -1,0 +1,10 @@
+key1:
+  file2: theOther
+  file1: theOne
+key2:
+  file1: key2value1
+key3:
+  file2: same
+  file1: same
+key4:
+  file2: '@key4v@alue:2'
