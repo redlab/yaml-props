@@ -15,6 +15,7 @@ import java.util.Properties;
 public class PropertiesToYamlConverter {
 
     private YamlWriter yamlWriter;
+    private Map<String, Map<String, String>> propertiesMap;
 
     public PropertiesToYamlConverter() {
         this(new SimpleYamlWriter());
@@ -22,9 +23,10 @@ public class PropertiesToYamlConverter {
 
     public PropertiesToYamlConverter(YamlWriter yamlWriter) {
         this.yamlWriter = yamlWriter;
+        propertiesMap = new HashMap<String, Map<String, String>>();
     }
 
-    public Map<String, Map<String, String>> addProperties(String fileKey, Properties properties, Map<String, Map<String, String>> propertiesMap) {
+    public PropertiesToYamlConverter addProperties(String fileKey, Properties properties) {
         for (Map.Entry<Object, Object> entry : properties.entrySet()) {
             String key= String.valueOf(entry.getKey());
             Map<String, String> map = propertiesMap.get(key);
@@ -34,15 +36,15 @@ public class PropertiesToYamlConverter {
             }
             map.put(fileKey, String.valueOf(entry.getValue()));
         }
-        return propertiesMap;
+        return this;
     }
 
-    public Map<String, Map<String, String>> addProperties(String fileKey, Properties properties) {
-        return this.addProperties(fileKey, properties, new HashMap<String, Map<String, String>>());
+
+    public void writeYaml(Writer out) throws IOException {
+        this.yamlWriter.write(propertiesMap, out);
     }
 
-    public void writeYaml(Writer out, Map<String, Map<String, String>> properties) throws IOException {
-        this.yamlWriter.write(properties, out);
+    public Map<String,Map<String,String>> getMap() {
+        return this.propertiesMap;
     }
-
 }
