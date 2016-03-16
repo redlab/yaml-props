@@ -1,0 +1,7 @@
+location: 'target/test-yamlprops/'
+type: 'properties'
+files:
+  dev:  'dev/settings.properties'
+  test: 'tst/settings.properties'
+  stage: 'stage/cloud/settings.properties'
+  prod: 'production/settings.properties'

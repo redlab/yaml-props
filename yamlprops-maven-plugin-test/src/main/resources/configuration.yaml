@@ -1,0 +1,12 @@
+# settings  configuration file in yaml
+application.name:
+  default: Tester
+  dev: Test[Dev]
+  test: Test[Test]
+  stage: Test[Stage]
+  prod: Test[Prod]
+application.version:
+  default: 1
+  dev: 2
+  test:
+
