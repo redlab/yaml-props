@@ -1,5 +1,5 @@
 /*
- *  Copyright 2015 Balder Van Camp
+ *  Copyright 2016 Balder Van Camp
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
 
 import be.redlab.maven.yamlprops.parser.YamlPropertyConverter;
@@ -56,25 +57,21 @@ public class YamlToPropertiesMojo extends AbstractMojo {
 	@Parameter(property = "yamlfile", defaultValue = "src/main/resources/settings.yaml")
 	protected File yamlfile;
 	/**
-	 * The target location. If the path is relative (does not start with / or a
+	 * The yamlprops configuration file location. If the path is relative (does not start with / or a
 	 * drive letter like C:), the path is relative to the directory containing
 	 * the POM. <br />
-	 * defaults to "src/main/resources/settings/${project.artifactId}/"
+	 * defaults to "src/main/resources/yamlprops.yaml"
 	 */
-	@Parameter(property = "target", defaultValue = "src/main/resources/settings/${project.artifactId}/")
-	protected File target;
-
-	/**
-	 * An optional target file. This will generate the yaml propertiesfiles with
-	 * the given targetFile name instead of giving name as defined in the yaml
-	 * config. The defined names in the yaml config are used as folders.
-	 */
-	@Parameter(property = "targetFile", defaultValue = "")
-	protected String targetFile;
+	@Parameter(property = "configuration", defaultValue = "src/main/resources/yamlprops.yaml")
+	protected File configuration;
+	// FIXME check property of compile target
+	@Parameter(property = "targetDir", defaultValue = "${project.build.outputDirectory}")
+	protected File targetDir;
 	/**
 	 * The character encoding scheme to be applied when parsing the yaml file.
-	 * Defaults to ${project.build.sourceEncoding}.
-	 */
+	@Parameter(property = "ignoreNotFound", defaultValue = "false")
+	* Defaults to ${project.build.sourceEncoding}.
+			*/
 	@Parameter(property = "readEncoding", defaultValue = "${project.build.sourceEncoding}")
 	protected String readEncoding;
 	/**
@@ -87,16 +84,12 @@ public class YamlToPropertiesMojo extends AbstractMojo {
 	 * Ignore yaml file not found. Defaults to false. Set true if you do not
 	 * want the build to fail when source file is not found.
 	 */
-	@Parameter(property = "ignoreNotFound", defaultValue = "false")
 	protected boolean ignoreNotFound;
-	/**
-	 * The file extension for generated property files. Defaults to properties
-	 */
-	@Parameter(property = "extension", defaultValue = "properties")
-	private String extension;
 
 	public void execute() throws MojoExecutionException, MojoFailureException {
-		getLog().info("Parsing and writing properties of " + yamlfile + " to " + target);
+		YamlConfiguration yamlConfiguration = getYamlConfiguration();
+		getLog().info("Parsing and writing properties of " + yamlfile + " to " );
+
 		YamlPropertyConverter converter = new YamlPropertyConverterImpl();
 		Map<String, Properties> map = null;
 		try {
@@ -112,30 +105,53 @@ public class YamlToPropertiesMojo extends AbstractMojo {
 				throw new MojoExecutionException("Unable to find provided yaml file ", e);
 			}
 		}
+		String location = yamlConfiguration.getLocation();
+		File baseDirectoryOfExport;
+		if (StringUtils.isNotBlank(location)) {
+			baseDirectoryOfExport = FileUtils.resolveFile(targetDir, location);
+		} else {
+			baseDirectoryOfExport = targetDir;
+		}
 		if (null != map) {
+					if (!baseDirectoryOfExport.mkdirs()) {
+						getLog().debug("Directory " + baseDirectoryOfExport + " not created, it probably already exists?.");
+					} else {
+						getLog().debug("Directory " + baseDirectoryOfExport + " created.");
+					}
 			for (Entry<String, Properties> e : map.entrySet()) {
+				File directoryOfExport = baseDirectoryOfExport;
 				FileOutputStream stream = null;
 				try {
-					if (!target.mkdirs()) {
-						getLog().debug("Directory " + target + " not created, it probably already exists?.");
-					} else {
-						getLog().debug("Directory " + target + " created.");
-					}
 					File file;
-					if (StringUtils.isBlank(targetFile)) {
-						file = new File(target, e.getKey() + "." + extension);
-					} else {
-						File targetDir = new File(target, e.getKey());
-						if (!targetDir.mkdirs()) {
-							getLog().debug("Not creating " + targetDir);
-						} else {
-							getLog().debug("created " + targetDir);
-						}
-						file = new File(targetDir, targetFile + "." + extension);
+					String targetFile;
+					String extension = "properties";
+					boolean isXml = false;
+					if ("xml".equalsIgnoreCase(yamlConfiguration.getType())) {
+						extension = "xml";
+						isXml = true;
 					}
-					boolean newFile = file.createNewFile();
-					stream = new FileOutputStream(file);
-					e.getValue().store(stream, "Written "+ (newFile?"new file":"") +" from yaml on " + new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()));
+					if (yamlConfiguration.getFiles().isEmpty() || !yamlConfiguration.getFiles().containsKey(e.getKey())) {
+						getLog().debug("Not found "+ e.getKey() +" to file mapping, using key as file name");
+						targetFile = e.getKey() + "." + extension;
+					} else {
+						String configuredFileName = yamlConfiguration.getFiles().get(e.getKey());
+						String dirname = FileUtils.getPath(configuredFileName, yamlConfiguration.getFileSeparator());
+						directoryOfExport = new File(directoryOfExport ,dirname);
+						directoryOfExport.mkdirs();
+						targetFile =  FileUtils.removePath(configuredFileName, yamlConfiguration.getFileSeparator());
+						getLog().debug("found mapping "+configuredFileName +" for "+ e.getKey() +" in " + directoryOfExport + " with file "+ targetFile );
+					}
+					 // targetFile
+					File propertyFile = new File(directoryOfExport, targetFile);
+					getLog().info("Writing to " + propertyFile);
+					boolean newFile = propertyFile.createNewFile();
+					stream = new FileOutputStream(propertyFile);
+					if (isXml) {
+						e.getValue().storeToXML(stream, "Written "+ (newFile?"new file":"") +" from yaml on " + new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()));
+					} else {
+						e.getValue().store(stream, "Written "+ (newFile?"new file":"") +" from yaml on " + new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()));
+					}
+
 				} catch (IOException e1) {
 					throw new MojoExecutionException("Unable to write file ", e1);
 				} finally {
@@ -151,6 +167,25 @@ public class YamlToPropertiesMojo extends AbstractMojo {
 			}
 
 		}
+	}
+
+	private YamlConfiguration getYamlConfiguration() throws MojoFailureException {
+		YamlConfiguration yamlConfiguration;
+		if (null != configuration) {
+			try {
+				yamlConfiguration = new YamlConfigurationReaderWriter().getFromFile(configuration);
+			} catch (FileNotFoundException e) {
+				if (ignoreNotFound) {
+				getLog().info("Ignoring not found yaml configuration at " + configuration.getAbsolutePath() + " using default");
+					yamlConfiguration = new YamlConfiguration();
+				} else {
+					throw new MojoFailureException("Unable to read configuration for yaml to properties.", e);
+				}
+			}
+		} else {
+			yamlConfiguration = new YamlConfiguration();
+		}
+		return yamlConfiguration;
 	}
 
 }

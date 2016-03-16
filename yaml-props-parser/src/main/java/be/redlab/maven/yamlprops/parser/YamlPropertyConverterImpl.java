@@ -1,5 +1,5 @@
 /*
- *  Copyright 2015 Balder Van Camp
+ *  Copyright 2016 Balder Van Camp
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.

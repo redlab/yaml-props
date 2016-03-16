@@ -8,6 +8,7 @@
 		<module>yaml-props-parser</module>
 		<module>yamlprops-maven-plugin</module>
 		<module>yaml-properties-converter</module>
+		<module>yamlprops-maven-plugin-test</module>
 	</modules>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
