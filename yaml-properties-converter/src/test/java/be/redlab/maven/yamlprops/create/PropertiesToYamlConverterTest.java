@@ -4,6 +4,7 @@ import com.google.common.truth.Truth;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -62,6 +63,7 @@ public class PropertiesToYamlConverterTest {
         Truth.assertThat(key1).doesNotContainKey("file1");
     }
 
+    @Ignore
     @Test
     public void write() throws IOException {
         out = new ByteArrayOutputStream();
