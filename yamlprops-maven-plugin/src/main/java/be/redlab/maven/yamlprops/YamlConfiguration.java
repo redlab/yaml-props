@@ -15,8 +15,6 @@
  */
 package be.redlab.maven.yamlprops;
 
-import java.io.File;
-import java.nio.file.FileSystem;
 import java.util.HashMap;
 import java.util.Map;
 
