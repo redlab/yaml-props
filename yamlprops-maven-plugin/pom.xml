@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>be.redlab.maven</groupId>
 		<artifactId>yaml-props</artifactId>
-		<version>1.1-SNAPSHOT</version>
+		<version>1.1</version>
 	</parent>
 	<artifactId>yamlprops-maven-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
@@ -54,7 +54,7 @@
 		<dependency>
 			<groupId>be.redlab.maven</groupId>
 			<artifactId>yaml-props-parser</artifactId>
-			<version>1.1-SNAPSHOT</version>
+			<version>1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.yaml</groupId>

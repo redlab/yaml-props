@@ -13,6 +13,7 @@ hs_err_pid*
 
 # Maven build folders
 target/
+pom.xml.versionsBackup
 
 # IDE Folders / Files
 .settings/
