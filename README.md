@@ -1,15 +1,78 @@
 # yaml-props
-Create Java Properties files from a yaml file
 
-## yamlprops:yamlprops
+A Maven plugin to parse a yaml file with a certain structure to property files.
 
-### Available parameters:
+## A bit of background
+This project was developed to replace the current way of generating property and settings files from excel files at Truvo&reg;.
+ After migrating from svn to git it became a real horror to maintain settings and messages (e.g. translations) in excel files. Certainly when changing the excel in different branches. I probably don't need to draw a picture for you to get the point. (For what it's worth I found that it was a horror in svn to)
+
+## The yaml file(s)
+
+The plugin requires 2 files per execution. One with the configuration and one with the content. In the future the configuration file might be enclosed as a first document in the settings file.
+
+The configuration one contains information for yamlprops-maven-plugin on how to export the content. It has a specific structure since it's loaded in the YamlConfiguration.class object.
+Example:
+```yaml
+location: 'configfiles/'
+type: 'properties'
+files:
+  default: settings-default.properties
+  dev:  'dev/settings.properties'
+  key: 'file.properties'
+  test: 'test/settings.properties'
+  prod: 'production/settings.properties'
+```
+
+Note: all elements are optional
+* The *location* field defines the directory relative to modules project.build.outputDirectory.
+* The *type* field can have any value it will always be a property file. Except for value xml then the property file is exported as xml.
+* the *files* is a map that optionally defines in which files certain properties end up. Properties with that have a key that conforms to a key in this map will end up in a file that is defined by the value in this map. When a key is not in this map, the key itself will be used as property file name.
+
+Example properties yaml file.
+
+```yaml
+some.db.url:
+  default: localhost:5432
+  dev: db-dev.example.org:5432
+  test: db-test.example.org:5432
+  prod: db-prod.example.org:5432
+some.db.user:
+  default: dbuser
+some.db.pass:
+  default: aaa
+  dev: flzue554rfjfrujeuj
+  test: dliergigoijiz45kgkf
+  prod: yojdEGGsk49kE33
+
+```
+
+Given the above configuration and the maven configuration
+```
+<plugin>
+    <groupId>be.redlab.maven</groupId>
+    <artifactId>yamlprops-maven-plugin</artifactId>
+    <version>1.1</version>
+    <configuration>
+        <yamlfile>src/main/resources/configuration.yaml</yamlfile>
+    </configuration>
+    <executions>
+        <execution>
+            <goals>
+                <goal>yamlprops</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+```
+the property files would be as follows: 4 property files exported to target/classes/configfiles/
+* settings-default.properties containing some.db.url, some.db.user, some.db.pass
+* dev/settings.properties containing some.db.url, some.db.pass
+* test/settings.properties containing some.db.url, some.db.pass
+* prod/settings.properties containing some.db.url, some.db.pass
+
+
+### Other Available parameters for the maven plugin:
 output of mvn be.redlab.maven:yamlprops-maven-plugin:help -Ddetail=true 
-
-*    extension (Default: properties)
-
-      The fle extension for generated property files. Defaults to properties
-      User property: extension
 
 *    ignoreNotFound (Default: false)
 
@@ -22,14 +85,6 @@ output of mvn be.redlab.maven:yamlprops-maven-plugin:help -Ddetail=true
       The character encoding scheme to be applied when parsing the yaml file.
       Defaults to ${project.build.sourceEncoding}.
       User property: readEncoding
-
-*    target (Default: src/main/resources/settings/${project.artifactId}/)
-
-      The target location. If the path is relative (does not start with / or a
-      drive letter like C:), the path is relative to the directory containing
-      the POM.
-      defaults to 'src/main/resources/settings/'
-      User property: target
 
  *   writeEncoding (Default: ${project.build.sourceEncoding})
  
@@ -44,31 +99,13 @@ output of mvn be.redlab.maven:yamlprops-maven-plugin:help -Ddetail=true
       the directory containing the POM.
       defautl: 'src/main/resources/settings.yaml'
       User property: yamlfile
+*    targetDir (Defa}/)
 
+      The target location. If the path is relative (does not start with / or a
+      drive letter like C:), the path is relative to the directory containing
+      the POM.
+      defaults to '${}/'
+      User property: targetDir
+*   configuration
 
-POM excerpt
-
-```
-<plugin>
-	<groupId>be.redlab.maven</groupId>
-	<artifactId>yamlprops-maven-plugin</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<configuration>
-		<!-- Specify the target folder to parse to -->
-		<target>target/generated-sources/config/</target>
-		<!-- Specify the source yaml file -->
-		<yamlfile>src/main/config/configuration.yaml</yamlfile>
-		<!-- Specify the encoding of source yaml file, you can also use writeEncoding to define the encoding to write in, if not given readEncoding is used -->
-		<readEncoding>UTF-8</readEncoding>
-	</configuration>
-	<executions>
-		<execution>
-			<phase>generate-sources</phase>
-			<goals>
-				<goal>yamlprops</goal>
-			</goals>
-		</execution>
-	</executions>
-</plugin>
-
-```
+    the location f the configuration file, defaults to rc/main/resources/yamlprops.yaml
