@@ -7,12 +7,12 @@
     <parent>
         <groupId>be.redlab.maven</groupId>
         <artifactId>yaml-props</artifactId>
-        <version>1.2-SNAPSHOT</version>
+        <version>1.Ã2</version>
     </parent>
 
     <groupId>be.redlab.maven</groupId>
     <artifactId>yamlprops-maven-plugin-test</artifactId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.Ã2</version>
 
     <dependencies>
         <dependency>
@@ -28,7 +28,7 @@
             <plugin>
                 <groupId>be.redlab.maven</groupId>
                 <artifactId>yamlprops-maven-plugin</artifactId>
-                <version>1.2-SNAPSHOT</version>
+                <version>1.Ã2</version>
                 <configuration>
                     <yamlfile>src/main/resources/configuration.yaml</yamlfile>
                 </configuration>
