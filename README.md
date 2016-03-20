@@ -47,7 +47,7 @@ some.db.pass:
 ```
 
 Given the above configuration and the maven configuration
-```
+```xml
 <plugin>
     <groupId>be.redlab.maven</groupId>
     <artifactId>yamlprops-maven-plugin</artifactId>
