@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>be.redlab.maven</groupId>
 	<artifactId>yaml-props</artifactId>
-	<version>1.Ã2</version>
+	<version>DEVELOP-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<modules>
 		<module>yaml-props-parser</module>
