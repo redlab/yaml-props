@@ -1,0 +1,4 @@
+a.url:
+  key: http://www.example.org
+url.with.port:
+  key: https://www.example.org:443/
