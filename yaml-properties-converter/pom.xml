@@ -7,7 +7,7 @@
     <parent>
         <groupId>be.redlab.maven</groupId>
         <artifactId>yaml-props</artifactId>
-        <version>1.Ã2</version>
+        <version>1.2</version>
     </parent>
     <artifactId>yaml-properties-converter</artifactId>
     <packaging>jar</packaging>
