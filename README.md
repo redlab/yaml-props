@@ -26,7 +26,7 @@ files:
 Note: all elements are optional
 * The *location* field defines the directory relative to modules project.build.outputDirectory.
 * The *type* field can have any value it will always be a property file. Except for value xml then the property file is exported as xml.
-* the *files* is a map that optionally defines in which files certain properties end up. Properties with that have a key that conforms to a key in this map will end up in a file that is defined by the value in this map. When a key is not in this map, the key itself will be used as property file name.
+* the *files* is a map that optionally defines in which files certain properties end up. Properties that have a key, that conforms to a key in *files*, will end up in a file that is defined by the value. When a key is not in this map, the key itself will be used as property file name.
 
 Example properties yaml file.
 
