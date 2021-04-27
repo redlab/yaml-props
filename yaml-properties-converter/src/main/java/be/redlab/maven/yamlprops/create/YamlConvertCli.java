@@ -16,14 +16,11 @@
 package be.redlab.maven.yamlprops.create;
 
 import org.apache.commons.cli.*;
-import org.apache.commons.io.FileSystemUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.Properties;
 

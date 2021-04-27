@@ -9,7 +9,9 @@ import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Properties;
 
@@ -36,28 +38,28 @@ public class PropertiesToYamlConverterTest {
     }
 
     @Test
-    public void differentValuesForSameKeyFromDifferentFile() throws Exception {
+    public void differentValuesForSameKeyFromDifferentFile() {
         Map<String, String> key1 = propertiesMap.get("key1");
         Truth.assertThat(key1).containsEntry("file1", "theOne");
         Truth.assertThat(key1).containsEntry("file2", "theOther");
     }
 
     @Test
-    public void sameValuesForSameKeyFromDifferentFile() throws Exception {
+    public void sameValuesForSameKeyFromDifferentFile() {
         Map<String, String> key1 = propertiesMap.get("key3");
         Truth.assertThat(key1).containsEntry("file1", "same");
         Truth.assertThat(key1).containsEntry("file2", "same");
     }
 
     @Test
-    public void keyInOneButNotInOther() throws Exception {
+    public void keyInOneButNotInOther() {
         Map<String, String> key1 = propertiesMap.get("key2");
         Truth.assertThat(key1).containsEntry("file1", "key2value1");
         Truth.assertThat(key1).doesNotContainKey("file2");
     }
 
     @Test
-    public void keyInOtherButNotInOne() throws Exception {
+    public void keyInOtherButNotInOne() {
         Map<String, String> key1 = propertiesMap.get("key4");
         Truth.assertThat(key1).containsEntry("file2", "@key4v@alue:2");
         Truth.assertThat(key1).doesNotContainKey("file1");
@@ -68,7 +70,9 @@ public class PropertiesToYamlConverterTest {
     public void write() throws IOException {
         out = new ByteArrayOutputStream();
         propertiesToYamlConverter.writeYaml(new OutputStreamWriter(out));
-        String expected = IOUtils.toString(this.getClass().getResourceAsStream("expected.yaml"));
+        InputStream resourceAsStream = this.getClass().getResourceAsStream("expected.yaml");
+        Truth.assertThat(resourceAsStream).isNotNull();
+        String expected = IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8);
         Assert.assertEquals(expected, out.toString());
     }
 }

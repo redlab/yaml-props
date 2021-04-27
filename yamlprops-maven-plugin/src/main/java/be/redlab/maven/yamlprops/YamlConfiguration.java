@@ -46,7 +46,7 @@ public class YamlConfiguration {
 
     public Map<String, String> getFiles() {
         if (null == files) {
-            return new HashMap<String, String>();
+            return new HashMap<>();
         }
         return files;
     }

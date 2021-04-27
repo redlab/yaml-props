@@ -10,7 +10,6 @@
         <version>1.2</version>
     </parent>
 
-    <groupId>be.redlab.maven</groupId>
     <artifactId>yamlprops-maven-plugin-test</artifactId>
     <version>1.2</version>
 

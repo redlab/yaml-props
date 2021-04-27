@@ -25,7 +25,7 @@ import java.io.FileReader;
 import static org.yaml.snakeyaml.DumperOptions.ScalarStyle.PLAIN;
 
 public class YamlConfigurationReaderWriter {
-    private Yaml y;
+    private final Yaml y;
 
     public YamlConfigurationReaderWriter() {
         DumperOptions dumperOptions = new DumperOptions();

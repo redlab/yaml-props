@@ -1,6 +1,5 @@
 package be.redlab.maven.yamlprops;
 
-import com.google.common.collect.Maps;
 import org.junit.Assert;
 import org.junit.Test;
 import org.yaml.snakeyaml.DumperOptions;
@@ -18,7 +17,7 @@ public class YamlConfigurationTest {
         YamlConfiguration c = new YamlConfiguration();
         c.setLocation("location");
         c.setType("properties");
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
         map.put("dev", "dev.properties");
         c.setFiles(map);
         DumperOptions dumperOptions = new DumperOptions();

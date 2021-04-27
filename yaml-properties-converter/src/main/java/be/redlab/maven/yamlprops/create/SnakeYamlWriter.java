@@ -18,11 +18,9 @@ package be.redlab.maven.yamlprops.create;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
-import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
 
-import static org.yaml.snakeyaml.DumperOptions.ScalarStyle.LITERAL;
 import static org.yaml.snakeyaml.DumperOptions.ScalarStyle.PLAIN;
 
 /**
@@ -30,7 +28,7 @@ import static org.yaml.snakeyaml.DumperOptions.ScalarStyle.PLAIN;
  */
 public class SnakeYamlWriter implements YamlWriter {
     @Override
-    public void write(Map<String, Map<String, String>> properties, Writer out) throws IOException {
+    public void write(Map<String, Map<String, String>> properties, Writer out) {
         DumperOptions dumperOptions = new DumperOptions();
         dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
         dumperOptions.setDefaultScalarStyle(PLAIN);
@@ -39,7 +37,7 @@ public class SnakeYamlWriter implements YamlWriter {
         for (Map.Entry<String, Map<String, String>> entry : properties.entrySet()) {
 
             for (Map.Entry<String, String> stringEntry : entry.getValue().entrySet()) {
-
+                // TODO ?
             }
 
 

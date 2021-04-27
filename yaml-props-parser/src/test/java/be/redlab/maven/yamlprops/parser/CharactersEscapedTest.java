@@ -15,6 +15,7 @@
  */
 package be.redlab.maven.yamlprops.parser;
 
+import com.google.common.truth.Truth;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -22,7 +23,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import java.io.*;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Properties;
 
@@ -33,12 +34,13 @@ public class CharactersEscapedTest {
     @Rule
     public TemporaryFolder folder =new TemporaryFolder();
     private YamlPropertyConverter yamlPropertyConverter = new YamlPropertyConverterImpl();
-    private Map<String, Properties> propmap;
     private Properties properties;
 
     @Before
     public void setup() throws IOException {
-        propmap = yamlPropertyConverter.convert(new InputStreamReader(YamlConfigToPropertiesTest.class.getResourceAsStream("/specialchars.yaml"), Charset.forName("UTF-8")));
+        InputStream resourceAsStream = YamlConfigToPropertiesTest.class.getResourceAsStream("/specialchars.yaml");
+        Truth.assertWithMessage("specialchars.yml not found").that(resourceAsStream).isNotNull();
+        Map<String, Properties> propmap = yamlPropertyConverter.convert(new InputStreamReader(resourceAsStream, StandardCharsets.UTF_8));
         Properties key = propmap.get("key");
         File file = folder.newFile("key.properties");
         key.store(new FileOutputStream(file), "test");

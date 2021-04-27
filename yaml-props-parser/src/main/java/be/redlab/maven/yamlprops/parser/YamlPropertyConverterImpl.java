@@ -49,7 +49,7 @@ public class YamlPropertyConverterImpl implements YamlPropertyConverter {
 	@Override
 	public Map<String, Properties> convert(Reader input) {
 		Yaml y = new Yaml();
-		Map<String, Properties> propertiesMap = new HashMap<String, Properties>();
+		Map<String, Properties> propertiesMap = new HashMap<>();
 		String currentKey = "";
 		String currentEnv = "";
 		for (Event event : y.parse(input)) {
