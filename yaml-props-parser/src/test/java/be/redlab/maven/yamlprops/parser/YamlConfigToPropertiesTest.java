@@ -15,8 +15,10 @@
  */
 package be.redlab.maven.yamlprops.parser;
 
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Properties;
 
@@ -35,7 +37,9 @@ public class YamlConfigToPropertiesTest {
 
 	@Before
 	public void setup() {
-		propmap = yamlPropertyConverter.convert(new InputStreamReader(YamlConfigToPropertiesTest.class.getResourceAsStream("/configuration.yaml"), Charset.forName("UTF-8")));
+		InputStream resourceAsStream = YamlConfigToPropertiesTest.class.getResourceAsStream("/configuration.yaml");
+		Truth.assertWithMessage("Test requires a configuration.yaml on classpath ").that(resourceAsStream).isNotNull();
+		propmap = yamlPropertyConverter.convert(new InputStreamReader(resourceAsStream, StandardCharsets.UTF_8));
 	}
 	
 	@Test
@@ -45,7 +49,7 @@ public class YamlConfigToPropertiesTest {
 	
 	@Test
 	public void propertyDevContainAllKeys() {
-		Truth.assertThat(propmap.get("dev").keySet()).containsExactly("application.name", "application.version");
+		Truth.assertThat((Iterable<Object>) propmap.get("dev").keySet()).containsExactly("application.name", "application.version");
 	}
 	
 	@Test
