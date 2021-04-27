@@ -3,14 +3,14 @@
 A Maven plugin to parse a yaml file with a certain structure to property files.
 
 ## A bit of background
-This project was developed to replace the current way of generating property and settings files from excel files at Truvo&reg;.
- After migrating from svn to git it became a real horror to maintain settings and messages (e.g. translations) in excel files. Certainly when changing the excel in different branches. I probably don't need to draw a picture for you to get the point. (For what it's worth I found that it was a horror in svn to)
+This project was developed to replace the current way of generating property and settings files from Excel files at Truvo&reg;.
+ After migrating from svn to git it became a real horror to maintain settings and messages (e.g. translations) in Excel files. Certainly when changing the Excel in different branches. I probably don't need to draw a picture for you to get the point. (For what it's worth I found that it was a horror in svn to)
 
 ## The yaml file(s)
 
 The plugin requires 2 files per execution. One with the configuration and one with the content. In the future the configuration file might be enclosed as a first document in the settings file.
 
-The configuration one contains information for yamlprops-maven-plugin on how to export the content. It has a specific structure since it's loaded in the YamlConfiguration.class object.
+The configuration one contains information for yamlprops-maven-plugin on how to export the content. It has a specific structure since it's loaded in the `YamlConfiguration.class` object.
 Example:
 ```yaml
 location: 'configfiles/'
@@ -95,11 +95,11 @@ output of mvn be.redlab.maven:yamlprops-maven-plugin:help -Ddetail=true
  *  yamlfile (Default: src/main/resources/settings.yaml)
  
       The yaml file containing the properties to parse. If the path is relative
-      (does not start with / or a drive letter like C:), the path is relative to
+      (does not start with / or a drive letter like C: ), the path is relative to
       the directory containing the POM.
       defautl: 'src/main/resources/settings.yaml'
       User property: yamlfile
-*    targetDir (Defa}/)
+*    targetDir (Default: /)
 
       The target location. If the path is relative (does not start with / or a
       drive letter like C:), the path is relative to the directory containing
