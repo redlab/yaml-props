@@ -24,6 +24,7 @@ import org.junit.rules.TemporaryFolder;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Map;
 import java.util.Properties;
 
@@ -33,7 +34,7 @@ import java.util.Properties;
 public class CharactersEscapedTest {
     @Rule
     public TemporaryFolder folder =new TemporaryFolder();
-    private YamlPropertyConverter yamlPropertyConverter = new YamlPropertyConverterImpl();
+    private final YamlPropertyConverter yamlPropertyConverter = new YamlPropertyConverterImpl();
     private Properties properties;
 
     @Before
@@ -43,15 +44,15 @@ public class CharactersEscapedTest {
         Map<String, Properties> propmap = yamlPropertyConverter.convert(new InputStreamReader(resourceAsStream, StandardCharsets.UTF_8));
         Properties key = propmap.get("key");
         File file = folder.newFile("key.properties");
-        key.store(new FileOutputStream(file), "test");
+        key.store(Files.newOutputStream(file.toPath()), "test");
         System.out.println(file);
         properties = new Properties();
-        properties.load(new FileInputStream(file));
+        properties.load(Files.newInputStream(file.toPath()));
     }
 
     @Test
     public void anUrl() {
-        Assert.assertEquals("http://www.example.org", properties.getProperty("a.url"));
+        Assert.assertEquals("https://www.example.org", properties.getProperty("a.url"));
     }
     @Test
     public void aUrlWithPort() {

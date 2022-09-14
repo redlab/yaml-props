@@ -63,7 +63,6 @@ public class YamlToPropertiesMojo extends AbstractMojo {
     protected File targetDir;
     /**
      * The character encoding scheme to be applied when parsing the yaml file.
-     *
      * Defaults to ${project.build.sourceEncoding}.
      */
     @Parameter(property = "readEncoding", defaultValue = "${project.build.sourceEncoding}")
@@ -117,7 +116,6 @@ public class YamlToPropertiesMojo extends AbstractMojo {
                 File directoryOfExport = baseDirectoryOfExport;
                 FileOutputStream stream = null;
                 try {
-                    File file;
                     String targetFile;
                     String extension = "properties";
                     boolean isXml = false;

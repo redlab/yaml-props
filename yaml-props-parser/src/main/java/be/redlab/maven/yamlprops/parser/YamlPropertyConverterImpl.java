@@ -27,7 +27,7 @@ import org.yaml.snakeyaml.events.ScalarEvent;
 
 /**
  * 
- *	Parses a yaml formated file to different property files.<br />Format of the yaml properties
+ *	Parses a yaml formatted file to different property files.<br />Format of the yaml properties
  *<pre>
  *a.key.for.property:
  *  file1: fileOnePropertyValue

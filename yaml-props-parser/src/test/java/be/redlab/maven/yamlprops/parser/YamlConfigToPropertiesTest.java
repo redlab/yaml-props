@@ -31,7 +31,7 @@ import com.google.common.truth.Truth;
  */
 public class YamlConfigToPropertiesTest {
 	
-	private YamlPropertyConverter yamlPropertyConverter = new YamlPropertyConverterImpl();
+	private final YamlPropertyConverter yamlPropertyConverter = new YamlPropertyConverterImpl();
 	private Map<String, Properties> propmap;
 
 	@Before
@@ -43,12 +43,12 @@ public class YamlConfigToPropertiesTest {
 	
 	@Test
 	public void mapContainsAllKeys() {
-		Truth.assertThat((Iterable<String>) propmap.keySet()).containsAllOf("dev", "test", "stage", "prod", "default");
+		Truth.assertThat(propmap.keySet()).containsExactly("dev", "test", "stage", "prod", "default");
 	}
 	
 	@Test
 	public void propertyDevContainAllKeys() {
-		Truth.assertThat((Iterable<Object>) propmap.get("dev").keySet()).containsExactly("application.name", "application.version");
+		Truth.assertThat(propmap.get("dev").keySet()).containsExactly("application.name", "application.version");
 	}
 	
 	@Test
