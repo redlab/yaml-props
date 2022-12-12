@@ -15,13 +15,22 @@
  */
 package be.redlab.maven.yamlprops;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
+import be.redlab.maven.yamlprops.parser.YamlPropertyConverter;
+import be.redlab.maven.yamlprops.parser.YamlPropertyConverterImpl;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -29,10 +38,6 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.StringUtils;
-
-import be.redlab.maven.yamlprops.parser.YamlPropertyConverter;
-import be.redlab.maven.yamlprops.parser.YamlPropertyConverterImpl;
 
 /**
  * @author redlab
@@ -87,7 +92,7 @@ public class YamlToPropertiesMojo extends AbstractMojo {
         YamlPropertyConverter converter = new YamlPropertyConverterImpl();
         Map<String, Properties> map = null;
         try {
-            map = converter.convert(StringUtils.isBlank(readEncoding) ? new InputStreamReader(new FileInputStream(yamlfile)) : new InputStreamReader(new FileInputStream(yamlfile),
+            map = converter.convert(readEncoding == null || readEncoding.trim().length() > 0 ? new InputStreamReader(new FileInputStream(yamlfile)) : new InputStreamReader(new FileInputStream(yamlfile),
                     readEncoding));
         } catch (UnsupportedEncodingException e) {
             throw new MojoExecutionException("Unable to use provided encoding", e);
@@ -101,7 +106,7 @@ public class YamlToPropertiesMojo extends AbstractMojo {
         }
         String location = yamlConfiguration.getLocation();
         File baseDirectoryOfExport;
-        if (StringUtils.isNotBlank(location)) {
+        if (location != null && location.trim().length() > 0) {
             baseDirectoryOfExport = FileUtils.resolveFile(targetDir, location);
         } else {
             baseDirectoryOfExport = targetDir;

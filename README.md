@@ -109,3 +109,8 @@ output of mvn be.redlab.maven:yamlprops-maven-plugin:help -Ddetail=true
 *   configuration
 
     the location f the configuration file, defaults to rc/main/resources/yamlprops.yaml
+
+## Known vulnerabilities
+
+For https://nvd.nist.gov/vuln/detail/CVE-2022-1471 see https://bitbucket.org/snakeyaml/snakeyaml/wiki/CVE%20&%20NIST.md.
+Which is actually not really an issue. It is just complaining that you as user are responsible to provide trusted input. 
