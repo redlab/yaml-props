@@ -1,5 +1,5 @@
 /*
- *  Copyright 2016 Balder Van Camp
+ *  Copyright 2024 Balder Van Camp
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ public class YamlConfiguration {
     private String location;
     private String type;
     private Map<String, String> files;
-    private char fileSeparator = '/';
+    private String fileSeparator = "/";
 
     public YamlConfiguration() {
     }
@@ -55,11 +55,11 @@ public class YamlConfiguration {
         this.files = files;
     }
 
-    public char getFileSeparator() {
+    public String getFileSeparator() {
         return fileSeparator;
     }
 
-    public void setFileSeparator(char fileSeparator) {
+    public void setFileSeparator(String fileSeparator) {
         this.fileSeparator = fileSeparator;
     }
 }
