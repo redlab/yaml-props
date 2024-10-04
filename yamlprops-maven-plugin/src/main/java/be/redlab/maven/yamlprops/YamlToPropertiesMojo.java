@@ -1,5 +1,5 @@
 /*
- *  Copyright 2016 Balder Van Camp
+ *  Copyright 2024 Balder Van Camp
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -15,20 +15,6 @@
  */
 package be.redlab.maven.yamlprops;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Properties;
-
 import be.redlab.maven.yamlprops.parser.YamlPropertyConverter;
 import be.redlab.maven.yamlprops.parser.YamlPropertyConverterImpl;
 import org.apache.maven.plugin.AbstractMojo;
@@ -37,7 +23,24 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.codehaus.plexus.util.FileUtils;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
 
 /**
  * @author redlab
@@ -92,7 +95,7 @@ public class YamlToPropertiesMojo extends AbstractMojo {
         YamlPropertyConverter converter = new YamlPropertyConverterImpl();
         Map<String, Properties> map = null;
         try {
-            map = converter.convert(readEncoding == null || readEncoding.trim().length() > 0 ? new InputStreamReader(new FileInputStream(yamlfile)) : new InputStreamReader(new FileInputStream(yamlfile),
+            map = converter.convert(readEncoding == null || !readEncoding.trim().isEmpty() ? new InputStreamReader(new FileInputStream(yamlfile)) : new InputStreamReader(new FileInputStream(yamlfile),
                     readEncoding));
         } catch (UnsupportedEncodingException e) {
             throw new MojoExecutionException("Unable to use provided encoding", e);
@@ -106,8 +109,8 @@ public class YamlToPropertiesMojo extends AbstractMojo {
         }
         String location = yamlConfiguration.getLocation();
         File baseDirectoryOfExport;
-        if (location != null && location.trim().length() > 0) {
-            baseDirectoryOfExport = FileUtils.resolveFile(targetDir, location);
+        if (location != null && !location.trim().isEmpty()) {
+            baseDirectoryOfExport = Paths.get(targetDir.toString(), location).toFile();
         } else {
             baseDirectoryOfExport = targetDir;
         }
@@ -133,10 +136,11 @@ public class YamlToPropertiesMojo extends AbstractMojo {
                         targetFile = e.getKey() + "." + extension;
                     } else {
                         String configuredFileName = yamlConfiguration.getFiles().get(e.getKey());
-                        String dirname = FileUtils.getPath(configuredFileName, yamlConfiguration.getFileSeparator());
+                        Path configuredFileNamePath = Paths.get(configuredFileName.replace(yamlConfiguration.getFileSeparator(), FileSystems.getDefault().getSeparator()));
+                        String dirname = configuredFileNamePath.getParent().toString();
                         directoryOfExport = new File(directoryOfExport, dirname);
-                        directoryOfExport.mkdirs();
-                        targetFile = FileUtils.removePath(configuredFileName, yamlConfiguration.getFileSeparator());
+                        Files.createDirectories(directoryOfExport.toPath());
+                        targetFile = configuredFileNamePath.getFileName().toString();
                         getLog().debug("found mapping " + configuredFileName + " for " + e.getKey() + " in " + directoryOfExport + " with file " + targetFile);
                     }
                     // targetFile
