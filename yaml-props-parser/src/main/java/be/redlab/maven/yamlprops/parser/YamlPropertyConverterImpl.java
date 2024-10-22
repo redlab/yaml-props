@@ -1,5 +1,5 @@
 /*
- *  Copyright 2016 Balder Van Camp
+ *  Copyright 2024 Balder Van Camp
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -15,15 +15,15 @@
  */
 package be.redlab.maven.yamlprops.parser;
 
-import java.io.Reader;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.events.Event;
 import org.yaml.snakeyaml.events.Event.ID;
 import org.yaml.snakeyaml.events.ScalarEvent;
+
+import java.io.Reader;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * 
