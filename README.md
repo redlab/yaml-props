@@ -51,7 +51,7 @@ Given the above configuration and the maven configuration
 <plugin>
     <groupId>be.redlab.maven</groupId>
     <artifactId>yamlprops-maven-plugin</artifactId>
-    <version>1.1</version>
+    <version>2.0</version>
     <configuration>
         <yamlfile>src/main/resources/configuration.yaml</yamlfile>
     </configuration>
@@ -102,7 +102,7 @@ output of mvn be.redlab.maven:yamlprops-maven-plugin:help -Ddetail=true
 *    targetDir (Default: /)
 
       The target location. If the path is relative (does not start with / or a
-      drive letter like C:), the path is relative to the directory containing
+      drive letter like C ), the path is relative to the directory containing
       the POM.
       defaults to '${}/'
       User property: targetDir
@@ -112,5 +112,5 @@ output of mvn be.redlab.maven:yamlprops-maven-plugin:help -Ddetail=true
 
 ## Known vulnerabilities
 
-For https://nvd.nist.gov/vuln/detail/CVE-2022-1471 see https://bitbucket.org/snakeyaml/snakeyaml/wiki/CVE%20&%20NIST.md.
+[RESOLVED] For https://nvd.nist.gov/vuln/detail/CVE-2022-1471 see https://bitbucket.org/snakeyaml/snakeyaml/wiki/CVE%20&%20NIST.md.
 Which is actually not really an issue. It is just complaining that you as user are responsible to provide trusted input. 

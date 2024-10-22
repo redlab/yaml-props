@@ -1,5 +1,5 @@
 /*
- *  Copyright 2015 Balder Van Camp
+ *  Copyright 2024 Balder Van Camp
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -15,17 +15,16 @@
  */
 package be.redlab.maven.yamlprops.parser;
 
+import com.google.common.truth.Truth;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Properties;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.google.common.truth.Truth;
 /**
  *
  */
@@ -34,14 +33,14 @@ public class YamlConfigToPropertiesTest {
 	private final YamlPropertyConverter yamlPropertyConverter = new YamlPropertyConverterImpl();
 	private Map<String, Properties> propmap;
 
-	@Before
+	@BeforeEach
 	public void setup() {
 		InputStream resourceAsStream = YamlConfigToPropertiesTest.class.getResourceAsStream("/configuration.yaml");
 		Truth.assertWithMessage("Test requires a configuration.yaml on classpath ").that(resourceAsStream).isNotNull();
 		propmap = yamlPropertyConverter.convert(new InputStreamReader(resourceAsStream, StandardCharsets.UTF_8));
 	}
 	
-	@Test
+	@org.junit.jupiter.api.Test
 	public void mapContainsAllKeys() {
 		Truth.assertThat(propmap.keySet()).containsExactly("dev", "test", "stage", "prod", "default");
 	}
@@ -51,23 +50,23 @@ public class YamlConfigToPropertiesTest {
 		Truth.assertThat(propmap.get("dev").keySet()).containsExactly("application.name", "application.version");
 	}
 	
-	@Test
+	@org.junit.jupiter.api.Test
 	public void propertyDevKeyHasValue() {
 		Truth.assertThat(propmap.get("dev").get("application.name")).isEqualTo("Test[Dev]");
 	}
 	
-	@Test
+	@org.junit.jupiter.api.Test
 	public void propertyTestKeyHasValue() {
 		Truth.assertThat(propmap.get("test").get("application.name")).isEqualTo("Test[Test]");
 	}
-	@Test
+	@org.junit.jupiter.api.Test
 	public void propertyKeyNotAvailableKeyIsAbsent() {
-		Assert.assertFalse("Key was found while not expected", propmap.get("stage").containsKey("application.version"));
+		Assertions.assertFalse(propmap.get("stage").containsKey("application.version"), "Key was found while not expected");
 	}
 	
-	@Test
+	@org.junit.jupiter.api.Test
 	public void propertyKeyAvailableButValueEmptyIsEmptyString() {
-		Assert.assertTrue("Key was found while not expected", propmap.get("test").containsKey("application.version"));
-		Assert.assertEquals("value was not empty", "", propmap.get("test").get("application.version"));
+		Assertions.assertTrue(propmap.get("test").containsKey("application.version"), "Key was found while not expected");
+		Assertions.assertEquals("", propmap.get("test").get("application.version"), "value was not empty");
 	}
 }

@@ -16,6 +16,7 @@
 package be.redlab.maven.yamlprops;
 
 import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
@@ -31,7 +32,9 @@ public class YamlConfigurationReaderWriter {
         DumperOptions dumperOptions = new DumperOptions();
         dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
         dumperOptions.setDefaultScalarStyle(PLAIN);
-        y = new Yaml(dumperOptions);
+        LoaderOptions loaderOptions = new LoaderOptions();
+        loaderOptions.setTagInspector(tag -> tag.getClassName().equals(YamlConfiguration.class.getName()));
+        y = new Yaml(loaderOptions, dumperOptions);
     }
 
     public YamlConfiguration getFromFile(File f) throws FileNotFoundException {
