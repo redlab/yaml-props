@@ -1,5 +1,5 @@
 /*
- *  Copyright 2016 Balder Van Camp
+ *  Copyright 2024 Balder Van Camp
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -36,11 +36,11 @@ public class PropertiesToYamlConverter {
     }
 
     public PropertiesToYamlConverter addProperties(String fileKey, Properties properties) {
-        for (Map.Entry<Object, Object> entry : properties.entrySet()) {
-            String key= String.valueOf(entry.getKey());
-            Map<String, String> map = propertiesMap.computeIfAbsent(key, k -> new HashMap<>());
-            map.put(fileKey, String.valueOf(entry.getValue()));
-        }
+        properties.forEach((k, v) -> {
+            String key = String.valueOf(k);
+            Map<String, String> map = propertiesMap.computeIfAbsent(key, newKey -> new HashMap<>());
+            map.put(fileKey, String.valueOf(v));
+        });
         return this;
     }
 

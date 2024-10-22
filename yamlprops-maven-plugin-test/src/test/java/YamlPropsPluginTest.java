@@ -1,11 +1,5 @@
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.io.IOException;
-import java.util.Properties;
-
 /*
- *  Copyright 2016 Balder Van Camp
+ *  Copyright 2024 Balder Van Camp
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -19,6 +13,12 @@ import java.util.Properties;
    See the License for the specific language governing permissions and
    limitations under the License.
  */
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.util.Properties;
+
 public class YamlPropsPluginTest {
 
     @Test
@@ -28,7 +28,7 @@ public class YamlPropsPluginTest {
             p.load(YamlPropsPluginTest.class.getResourceAsStream("/test-yamlprops/default.properties"));
         } catch (IOException e) {
             e.printStackTrace();
-            Assert.fail("Failed with " + e.getMessage());
+            Assertions.fail("Failed with " + e.getMessage());
         }
     }
 
@@ -39,7 +39,7 @@ public class YamlPropsPluginTest {
             p.load(YamlPropsPluginTest.class.getResourceAsStream("/test-yamlprops/production/settings.properties"));
         } catch (IOException e) {
             e.printStackTrace();
-            Assert.fail("Failed with " + e.getMessage());
+            Assertions.fail("Failed with " + e.getMessage());
         }
     }
 }
