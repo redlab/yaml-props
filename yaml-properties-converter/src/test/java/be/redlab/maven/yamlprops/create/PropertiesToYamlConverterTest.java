@@ -2,10 +2,9 @@ package be.redlab.maven.yamlprops.create;
 
 import com.google.common.truth.Truth;
 import org.apache.commons.io.IOUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -15,14 +14,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Properties;
 
-public class PropertiesToYamlConverterTest {
+class PropertiesToYamlConverterTest {
 
     private Map<String, Map<String, String>> propertiesMap;
     ByteArrayOutputStream out;
         PropertiesToYamlConverter propertiesToYamlConverter;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         Properties setOne = new Properties();
         Properties setTwo = new Properties();
         setOne.put("key1", "theOne");
@@ -65,7 +64,7 @@ public class PropertiesToYamlConverterTest {
         Truth.assertThat(key1).doesNotContainKey("file1");
     }
 
-    @Ignore
+    @Disabled
     @Test
     public void write() throws IOException {
         out = new ByteArrayOutputStream();
@@ -73,6 +72,6 @@ public class PropertiesToYamlConverterTest {
         InputStream resourceAsStream = this.getClass().getResourceAsStream("expected.yaml");
         Truth.assertThat(resourceAsStream).isNotNull();
         String expected = IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8);
-        Assert.assertEquals(expected, out.toString());
+        Truth.assertThat(out.toString()).isEqualTo(expected);
     }
 }

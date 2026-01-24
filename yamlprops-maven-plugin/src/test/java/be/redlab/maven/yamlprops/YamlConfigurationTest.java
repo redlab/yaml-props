@@ -1,8 +1,9 @@
 package be.redlab.maven.yamlprops;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 
 import java.util.HashMap;
@@ -23,11 +24,13 @@ public class YamlConfigurationTest {
         DumperOptions dumperOptions = new DumperOptions();
         dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
         dumperOptions.setDefaultScalarStyle(PLAIN);
-        Yaml y = new Yaml(dumperOptions);
+        LoaderOptions loaderOptions = new LoaderOptions();
+        loaderOptions.setTagInspector(tag -> tag.getClassName().equals(YamlConfiguration.class.getName()));
+        Yaml y = new Yaml(loaderOptions, dumperOptions);
         System.out.println( y.dump(c));
         YamlConfiguration load = y.loadAs(y.dump(c), YamlConfiguration.class);
-        Assert.assertEquals("location", load.getLocation());
-        Assert.assertEquals("properties", load.getType());
-        Assert.assertEquals("dev.properties", c.getFiles().get("dev"));
+        Assertions.assertEquals("location", load.getLocation());
+        Assertions.assertEquals("properties", load.getType());
+        Assertions.assertEquals("dev.properties", c.getFiles().get("dev"));
     }
 }
